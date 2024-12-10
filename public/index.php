@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../bootstrap/app.php';
 
-use Framework\Support\Helper;
+use Framework\Support\ExceptionHandler;
 
-dump(Helper::greet('HanziHub!'));
+$exceptionHandler = new ExceptionHandler();
+
+set_exception_handler([$exceptionHandler, 'handle']);
+

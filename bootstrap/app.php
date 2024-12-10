@@ -2,6 +2,11 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
 use Framework\Routing\Router;
 use App\Controllers\HomeController;
 use App\Middleware\AuthMiddleware;
