@@ -3,9 +3,13 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
+use Framework\Database\Database;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
+
+$database = new Database();
+$pdo = $database->getConnection();
 
 use Framework\Routing\Router;
 use App\Controllers\HomeController;
