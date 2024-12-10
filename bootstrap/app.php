@@ -3,12 +3,12 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Framework\Routing\Router;
+use App\Controllers\HomeController;
 
 $router = new Router();
+$homeController = new HomeController();
 
-$router->add('GET', '/', function () {
-    return "Welcome to HanziHub!";
-});
+$router->add('GET', '/', [$homeController, 'index']);
 
 $router->add('GET','/user/{id}', function ($id) {
     return "User ID: $id";
