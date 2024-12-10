@@ -13,4 +13,9 @@ class HomeController
     {
         return "About HanziHub";
     }
+
+    public function dashboard(): string
+    {
+        return "Dashboard";
+    }
 }

@@ -6,10 +6,10 @@ class Router
 {
     protected array $routes = [];
 
-    public function add(string $method, string $uri, callable $action): void
+    public function add(string $method, string $uri, callable $action, array $middleware = []): void
     {
         $uri = rtrim($uri, '/');
-        $this->routes[] = compact('method', 'uri', 'action');
+        $this->routes[] = compact('method', 'uri', 'action', 'middleware');
     }
 
     public function dispatch(string $method, string $uri)
@@ -22,7 +22,21 @@ class Router
             if ($route['method'] === $method && preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
 
-                return call_user_func_array($route['action'], $matches);
+                $request = $_SERVER;
+                $middlewareStack = $route['middleware'];
+
+                $action = function ($request) use ($route, $matches) {
+                    return call_user_func_array($route['action'], $matches);
+                };
+
+                while ($middleware = array_pop($middlewareStack)) {
+                    $middlewareClass = new $middleware();
+                    $action = function ($request) use ($middlewareClass, $action) {
+                        return $middlewareClass->handle($request, $action);
+                    };
+                }
+
+                return $action($request);
             }
         }
 

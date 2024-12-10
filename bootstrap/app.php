@@ -4,11 +4,13 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Framework\Routing\Router;
 use App\Controllers\HomeController;
+use App\Middleware\AuthMiddleware;
 
 $router = new Router();
 $homeController = new HomeController();
 
 $router->add('GET', '/', [$homeController, 'index']);
+$router->add('GET', '/dashboard', [$homeController, 'dashboard'], [AuthMiddleware::class]);
 
 $router->add('GET','/user/{id}', function ($id) {
     return "User ID: $id";
