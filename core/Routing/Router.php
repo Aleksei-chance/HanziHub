@@ -21,6 +21,7 @@ class Router
 
             if ($route['method'] === $method && preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
+
                 return call_user_func_array($route['action'], $matches);
             }
         }

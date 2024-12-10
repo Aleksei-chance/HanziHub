@@ -10,8 +10,12 @@ $router->add('GET', '/', function () {
     return "Welcome to HanziHub!";
 });
 
-$router->add('GET','/about', function () {
-    return "About HanziHub";
+$router->add('GET','/user/{id}', function ($id) {
+    return "User ID: $id";
+});
+
+$router->add('GET','/post/{id}/comment/{commentId}', function ($id, $commentId) {
+    return "Post ID: $id, Comment ID: $commentId";
 });
 
 $method = $_SERVER['REQUEST_METHOD'];
