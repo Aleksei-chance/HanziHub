@@ -8,6 +8,13 @@ use Framework\Database\Model;
 use Framework\Routing\Router;
 use App\Controllers\HomeController;
 use App\Middleware\AuthMiddleware;
+use Framework\Units\Logger;
+
+set_exception_handler(function (Exception $exception) {
+    Logger::logError($exception->getMessage());
+    http_response_code(500);
+    echo "An error occurred. Check the logs for details.";
+});
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
@@ -41,7 +48,6 @@ if (php_sapi_name() !== 'cli') {
         throw new \Exception("Invalid request context. HTTP method orURI is missing.");
     }
 }
-
 
 
 

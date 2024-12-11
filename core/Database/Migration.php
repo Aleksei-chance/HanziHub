@@ -3,6 +3,7 @@
 namespace Framework\Database;
 
 use PDO;
+use Framework\Units\Logger;
 
 class Migration
 {
@@ -39,40 +40,55 @@ class Migration
     {
         $filePath = __DIR__ . '/../../database/migrations/' . $migration . '.php';
 
-        if (!file_exists($filePath)) {
-            throw new \Exception("Migration file not found: {$filePath}");
+        try {
+            if (!file_exists($filePath)) {
+                throw new \Exception("Migration file not found: {$filePath}");
+            }
+
+            require_once $filePath;
+
+            if (!class_exists($migration)) {
+                throw new \Exception("Migration class not found: {$migration}");
+            }
+
+            $migrationClass = new $migration($this->db);
+            $migrationClass->up();
+
+            $this->logMigration($migration);
+        } catch (\Exception $e) {
+            Logger::logError($e->getMessage());
+            throw $e;
         }
 
-        require_once $filePath;
 
-        if (!class_exists($migration)) {
-            throw new \Exception("Migration class not found: {$migration}");
-        }
-
-        $migrationClass = new $migration($this->db);
-        $migrationClass->up();
-
-        $this->logMigration($migration);
     }
 
     public function rollback(string $migration): void
     {
         $filePath = __DIR__ . '/../../database/migrations/' . $migration . '.php';
 
-        if (!file_exists($filePath)) {
-            throw new \Exception("Migration file not found: {$filePath}");
+        try {
+            if (!file_exists($filePath)) {
+                throw new \Exception("Migration file not found: {$filePath}");
+            }
+
+            require_once $filePath;
+
+            if (!class_exists($migration)) {
+                throw new \Exception("Migration class not found: {$migration}");
+            }
+
+            $migrationClass = new $migration($this->db);
+            $migrationClass->down();
+
+            $this->removeMigrationLog($migration);
+        } catch (\Exception $e) {
+            Logger::logError($e->getMessage());
+            throw $e;
         }
 
-        require_once $filePath;
 
-        if (!class_exists($migration)) {
-            throw new \Exception("Migration class not found: {$migration}");
-        }
 
-        $migrationClass = new $migration($this->db);
-        $migrationClass->down();
-
-        $this->removeMigrationLog($migration);
     }
 
     protected function logMigration(string $migration): void
