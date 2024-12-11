@@ -1,7 +1,7 @@
 <?php
 
 
-class CreateUsersTable
+class CreateBlocksTable
 {
     protected PDO $db;
 

@@ -11,6 +11,28 @@ class Migration
     public function __construct(PDO $db)
     {
         $this->db = $db;
+        $this->ensureMigrationsTable();
+    }
+
+    protected function ensureMigrationsTable(): void
+    {
+        $this->db->exec("
+            CREATE TABLE IF NOT EXISTS migrations (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                migration VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ");
+    }
+
+    public function runAll(): void
+    {
+        $pendingMigrations = $this->getPendingMigrations();
+
+        foreach ($pendingMigrations as $migration) {
+            echo "Running migration: $migration\n";
+            $this->run($migration);
+        }
     }
 
     public function run(string $migration): void
@@ -67,5 +89,21 @@ class Migration
     {
         $stmt = $this->db->query("SELECT migration FROM migrations");
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function getPendingMigrations(): array
+    {
+        $executedMigrations = $this->getExecutedMigrations();
+        $migrationFiles = glob(__DIR__ . '/../../database/migrations/*.php');
+
+        $pendingMigrations = [];
+        foreach ($migrationFiles as $file) {
+            $migration = basename($file, '.php');
+            if (!in_array($migration, $executedMigrations)) {
+                $pendingMigrations[] = $migration;
+            }
+        }
+
+        return $pendingMigrations;
     }
 }
