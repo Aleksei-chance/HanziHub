@@ -9,18 +9,35 @@ use Framework\Routing\Router;
 use App\Controllers\HomeController;
 use App\Middleware\AuthMiddleware;
 use Framework\Units\Logger;
+use Framework\Support\ExceptionHandler;
 
-set_exception_handler(function (Exception $exception) {
-    Logger::logError($exception->getMessage());
-    http_response_code(500);
-    echo "An error occurred. Check the logs for details.";
+set_exception_handler([ExceptionHandler::class, 'handle']);
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 });
+
+//set_exception_handler(function (Exception $exception) {
+//    Logger::logError($exception->getMessage());
+//    http_response_code(500);
+//    echo "An error occurred. Check the logs for details.";
+//});
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-$database = new Database();
-$pdo = $database->getConnection();
+$config = [
+    'dsn' => "mysql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_DATABASE']};charset=utf8mb4",
+    'username' => $_ENV['DB_USERNAME'],
+    'password' => $_ENV['DB_PASSWORD'],
+];
+
+try {
+    $database = new Database($config['dsn'], $config['username'], $config['password']);
+    $pdo = $database->getConnection();
+} catch (\Exception $e) {
+    die("Error: " . $e->getMessage());
+}
+
 
 Model::setDatabase($pdo);
 
@@ -43,13 +60,13 @@ if (php_sapi_name() !== 'cli') {
     });
 
     if ($method && $uri) {
-        dump($router->dispatch($method, $uri));
+        echo($router->dispatch($method, $uri));
     } else {
         throw new \Exception("Invalid request context. HTTP method orURI is missing.");
     }
 }
 
-
+//throw new Exception('Test!');
 
 
 

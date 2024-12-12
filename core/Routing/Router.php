@@ -41,6 +41,6 @@ class Router
         }
 
         http_response_code(404);
-        echo "404 Not Found";
+        throw new \Exception("404 Not Found");
     }
 }

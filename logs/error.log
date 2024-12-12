@@ -1,3 +1,6 @@
 [2024-12-11 16:48:22] Migration file not found: /Users/aleksei/Desktop/Test-apps/HanziHub/core/Database/../../database/migrations/CreateBlocksTable123.php
 [2024-12-11 16:48:22] Migration file not found: /Users/aleksei/Desktop/Test-apps/HanziHub/core/Database/../../database/migrations/CreateBlocksTable123.php
 [2024-12-11 16:51:10] Test exception!
+[2024-12-11 23:44:22]Test!in/Users/aleksei/Desktop/Test-apps/HanziHub/bootstrap/app.php:69
+[2024-12-11 23:44:36]Test!in/Users/aleksei/Desktop/Test-apps/HanziHub/bootstrap/app.php:69
+[2024-12-11 23:46:30]404 Not Foundin/Users/aleksei/Desktop/Test-apps/HanziHub/core/Routing/Router.php:44

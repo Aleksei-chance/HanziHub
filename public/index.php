@@ -6,15 +6,15 @@ require_once __DIR__ . '/../bootstrap/app.php';
 
 use App\Models\User;
 
-$users = User::all();
-echo "<pre>";
-dump($users);
-echo "</pre>";
-
-$user = User::find(1);
-echo "<pre>";
-dump($user);
-echo "</pre>";
+//$users = User::all();
+//echo "<pre>";
+//dump($users);
+//echo "</pre>";
+//
+//$user = User::find(1);
+//echo "<pre>";
+//dump($user);
+//echo "</pre>";
 
 $newUser = [
     'username' => 'testuser',
