@@ -56,7 +56,7 @@ class ExceptionHandler
 
     private static function logError(Throwable $exception): void
     {
-        $logMessage = "[" . date('Y-m-d H:i:s') . "]" . $exception->getMessage() . "in" . $exception->getFile() . ":" . $exception->getLine() . "\n";
+        $logMessage = "[" . date('Y-m-d H:i:s') . "] " . $exception->getMessage() . " in" . $exception->getFile() . ":" . $exception->getLine() . "\n";
         file_put_contents(__DIR__ . '/../../logs/error.log', $logMessage, FILE_APPEND);
     }
 }
